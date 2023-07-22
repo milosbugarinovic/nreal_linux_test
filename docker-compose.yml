@@ -1,0 +1,28 @@
+version: '3.5'
+services:
+
+  nreal_old:
+    build:
+      context: ./
+      dockerfile: ./.devcontainer/Dockerfile_old
+    privileged: true
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./:/myapp/nreal
+    command: sleep infinity
+    working_dir: /myapp/nreal
+
+  nreal:
+    build:
+      context: ./
+      dockerfile: ./.devcontainer/Dockerfile
+    privileged: true
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./:/myapp/nreal
+    command: sleep infinity
+    working_dir: /myapp/nreal

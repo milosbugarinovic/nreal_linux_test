@@ -8,11 +8,11 @@ import numpy as np
 
 command = "./nrealAirLinuxDriver"
 
-input_screens_width = 1920
-input_screens_height = 1080
-output_screen_width = 1920
-output_screen_height = 1080
-num_input_screens = 2
+INPUT_SCREENS_WIDTH = 1920
+INPUT_SCREENS_HEIGHT = 1080
+OUTPUT_SCREEN_WIDTH = 1920
+OUTPUT_SCREEN_HEIGHT = 1080
+NUM_INPUT_SCREENS = 2
 
 
 initial_pitch_value = None
@@ -52,7 +52,7 @@ def get_pitch_roll_yaw(input_str):
 
 
 cap = cv2.VideoCapture(
-    f"ximagesrc use_damage=1 endx={num_input_screens*input_screens_width-1} ! queue ! videoconvert ! video/x-raw, format=BGR ! appsink"
+    f"ximagesrc use_damage=1 endx={NUM_INPUT_SCREENS * INPUT_SCREENS_WIDTH - 1} ! queue ! videoconvert ! video/x-raw, format=BGR ! appsink"
 )
 
 
@@ -144,17 +144,17 @@ while True:
             # looking left case
             if normed_yaw_angle < 0:
                 img_left_mon = np.array(
-                    get_monitor_pixels(frame, input_screens_width, 0)
+                    get_monitor_pixels(frame, INPUT_SCREENS_WIDTH, 0)
                 )
                 img_center_mon = np.array(
-                    get_monitor_pixels(frame, input_screens_width, 1)
+                    get_monitor_pixels(frame, INPUT_SCREENS_WIDTH, 1)
                 )
                 sliced_img_left_mon = img_left_mon[
-                    :, int((1 - abs(normed_yaw_angle)) * input_screens_width) :, :
-                ]
+                    :, int((1 - abs(normed_yaw_angle)) * INPUT_SCREENS_WIDTH):, :
+                                      ]
                 sliced_img_center_mon = img_center_mon[
-                    :, 0 : int((1 - abs(normed_yaw_angle)) * input_screens_width), :
-                ]
+                    :, 0 : int((1 - abs(normed_yaw_angle)) * INPUT_SCREENS_WIDTH), :
+                                        ]
 
                 img = np.concatenate(
                     (sliced_img_left_mon, sliced_img_center_mon), axis=1
@@ -163,17 +163,17 @@ while True:
             # looking right case
             if normed_yaw_angle >= 0:
                 img_right_mon = np.array(
-                    get_monitor_pixels(frame, input_screens_width, 0)
+                    get_monitor_pixels(frame, INPUT_SCREENS_WIDTH, 0)
                 )
                 img_center_mon = np.array(
-                    get_monitor_pixels(frame, input_screens_width, 1)
+                    get_monitor_pixels(frame, INPUT_SCREENS_WIDTH, 1)
                 )
                 sliced_img_right_mon = img_right_mon[
-                    :, 0 : int(abs(normed_yaw_angle) * input_screens_width), :
-                ]
+                    :, 0 : int(abs(normed_yaw_angle) * INPUT_SCREENS_WIDTH), :
+                                       ]
                 sliced_img_center_mon = img_center_mon[
-                    :, int(abs(normed_yaw_angle) * input_screens_width) :, :
-                ]
+                    :, int(abs(normed_yaw_angle) * INPUT_SCREENS_WIDTH):, :
+                                        ]
 
                 img = np.concatenate(
                     (sliced_img_center_mon, sliced_img_right_mon), axis=1
@@ -223,7 +223,7 @@ while True:
             cv2.imshow(capname, img)
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
-            cv2.moveWindow(capname, input_screens_width * num_input_screens, 0)
+            cv2.moveWindow(capname, INPUT_SCREENS_WIDTH * NUM_INPUT_SCREENS, 0)
 
         except Exception as e:
             print(f"Couldn't parse imu values {e}")
